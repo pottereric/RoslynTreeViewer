@@ -3,8 +3,12 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="MainWindow" Height="350" Width="525">
     <Grid>
-        <TreeView x:Name="treeControl">
-            
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <TreeView x:Name="treeControl" Grid.Column="0" SelectedItemChanged="treeControl_SelectedItemChanged">
         </TreeView>
+        <TextBlock x:Name="textControl" Grid.Column="1"/>
     </Grid>
 </Window>

@@ -25,7 +25,10 @@ namespace RoslynTreeViewer
         {
             InitializeComponent();
 
-            string fileName = @"..\..\MainWindow.xaml.cs";
+            //string fileName = @"C:\SampleCode\TestClass.cs";
+            //string fileName = @"C:\SampleCode\euler9.cs";
+            string fileName = @"C:\SampleCode\Euler1Linq.cs";
+            //string fileName = @"..\..\MainWindow.xaml.cs";
 
             var tree = SyntaxTree.ParseFile(fileName);
 
@@ -46,6 +49,12 @@ namespace RoslynTreeViewer
             {
                 AddNodeToTree(childCodeName, newNode);
             }
+        }
+
+        private void treeControl_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
+        {
+            var selectedItem = e.NewValue as TreeViewItem;
+            textControl.Text = selectedItem.ToolTip.ToString();
         }
     }
 }
