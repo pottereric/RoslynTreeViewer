@@ -7,8 +7,14 @@
             <ColumnDefinition/>
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
-        <TreeView x:Name="treeControl" Grid.Column="0" SelectedItemChanged="treeControl_SelectedItemChanged">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="30"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <TextBox x:Name="fileNameTB" Grid.Row="0" Grid.Column="0" Margin="5"/>
+        <Button x:Name="AnalyzeBtn" Grid.Row="0" Grid.Column="1" Content="Analyze" Margin="5" Click="AnalyzeBtn_Click"/>
+        <TreeView x:Name="treeControl" Grid.Column="0" Grid.Row="1" SelectedItemChanged="treeControl_SelectedItemChanged">
         </TreeView>
-        <TextBlock x:Name="textControl" Grid.Column="1"/>
+        <TextBlock x:Name="textControl" Grid.Column="1" Grid.Row="1"/>
     </Grid>
 </Window>

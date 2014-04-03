@@ -1,4 +1,5 @@
 ﻿using Roslyn.Compilers.CSharp;
+using Roslyn.Compilers.VisualBasic;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,18 +26,34 @@ namespace RoslynTreeViewer
         {
             InitializeComponent();
 
-            //string fileName = @"C:\SampleCode\TestClass.cs";
-            //string fileName = @"C:\SampleCode\euler9.cs";
-            string fileName = @"C:\SampleCode\Euler1Linq.cs";
-            //string fileName = @"..\..\MainWindow.xaml.cs";
+            //this.fileNameTB.Text = @"C:\SampleCode\TestClass.cs";
+            //this.fileNameTB.Text = @"C:\SampleCode\TestClassWithProperties.cs";
+            //this.fileNameTB.Text = @"C:\SampleCode\euler9.cs";
+            //this.fileNameTB.Text = @"C:\SampleCode\Euler1Linq.cs";
+            //this.fileNameTB.Text = @"..\..\MainWindow.xaml.cs";
+            this.fileNameTB.Text = @"D:\Projects\CMCS E-Services\Trunk\App_Code\aes.vb";
 
-            var tree = SyntaxTree.ParseFile(fileName);
 
-            CompilationUnitSyntax compilationUnit = (CompilationUnitSyntax)tree.GetRoot();
-            AddNodeToTree(compilationUnit, treeControl);
+
+
         }
 
-        private void AddNodeToTree(SyntaxNode codeNode, ItemsControl parent)
+        private void AddNodeToTree(Roslyn.Compilers.CSharp.SyntaxNode codeNode, ItemsControl parent)
+        {
+            var newNode = new TreeViewItem();
+
+            newNode.Header = codeNode.GetType().Name;
+            newNode.ToolTip = codeNode.ToFullString();
+
+            parent.Items.Add(newNode);
+
+            foreach (var childCodeName in codeNode.ChildNodes())
+            {
+                AddNodeToTree(childCodeName, newNode);
+            }
+        }
+
+        private void AddNodeToTree(Roslyn.Compilers.VisualBasic.SyntaxNode codeNode, ItemsControl parent)
         {
             var newNode = new TreeViewItem();
 
@@ -55,6 +72,23 @@ namespace RoslynTreeViewer
         {
             var selectedItem = e.NewValue as TreeViewItem;
             textControl.Text = selectedItem.ToolTip.ToString();
+        }
+
+        private void AnalyzeBtn_Click(object sender, RoutedEventArgs e)
+        {
+            switch (System.IO.Path.GetExtension(this.fileNameTB.Text.ToLower()))
+            {
+                case ".vb":
+                    var vbTree = Roslyn.Compilers.VisualBasic.SyntaxTree.ParseFile(this.fileNameTB.Text);
+                    var vbCompilationUnit = (Roslyn.Compilers.VisualBasic.CompilationUnitSyntax)vbTree.GetRoot();
+                    AddNodeToTree(vbCompilationUnit, treeControl);
+                    break;
+                case ".cs":
+                    var csTree = Roslyn.Compilers.CSharp.SyntaxTree.ParseFile(this.fileNameTB.Text);
+                    var csCompilationUnit = (Roslyn.Compilers.CSharp.CompilationUnitSyntax)csTree.GetRoot();
+                    AddNodeToTree(csCompilationUnit, treeControl);
+                    break;
+            }
         }
     }
 }
